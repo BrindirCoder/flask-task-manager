@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Details</title>
+
+    <style>
+        /* --- COLORS --- */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --green: #10b981;
+            --red: #ef4444;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+        }
+
+        /* --- BASE STYLES --- */
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--bg);
+            padding: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 2rem;
+            animation: slideDown 0.6s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-15px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        /* --- TOP BUTTONS --- */
+        .top-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            padding: 12px 18px;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-add:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* --- NEW FILTER BAR --- */
+        .filters {
+            max-width: 1100px;
+            margin: 0 auto 25px;
+            background: var(--card-bg);
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .filter-box {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9rem;
+        }
+
+        .filter-box label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        select {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            background: #f8f9fc;
+            transition: 0.25s ease;
+        }
+
+        select:hover {
+            border-color: var(--primary);
+        }
+
+        .filters button {
+            background: var(--primary);
+            padding: 11px 18px;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease;
+            font-size: 1rem;
+            margin-left: auto;
+        }
+
+        .filters button:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* --- TABLE --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: fadeIn 1s ease;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95rem;
+        }
+
+        tr {
+            transition: 0.25s ease;
+        }
+
+        tr:hover {
+            background: #eef2ff;
+            transform: scale(1.01);
+        }
+
+        /* --- ACTION BUTTONS --- */
+        .btn-delete {
+            background: var(--red);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        .btn-edit {
+            background: var(--green);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-edit:hover {
+            background: #0f766e;
+            transform: scale(1.05);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 700px) {
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters button {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            td, th {
+                padding: 10px;
+            }
+
+            .top-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Task Details</h1>
+
+    <!-- Top Buttons -->
+    <div class="top-buttons">
+        <a href="{{ url_for('add_task') }}" class="btn-add">➕ Add New Task</a>
+        <a href="{{ url_for('index') }}" class="btn-add">⬅ Home</a>
+    </div>
+
+    <!-- Filters -->
+    <form method="GET" class="filters">
+
+        <div class="filter-box">
+            <label>Status</label>
+            <select name="status">
+                <option value="all" {% if status_filter=='all' or not status_filter %}selected{% endif %}>All</option>
+                <option value="pending" {% if status_filter=='pending' %}selected{% endif %}>Pending</option>
+                <option value="in-progress" {% if status_filter=='in-progress' %}selected{% endif %}>In Progress</option>
+                <option value="completed" {% if status_filter=='completed' %}selected{% endif %}>Completed</option>
+            </select>
+        </div>
+
+        <div class="filter-box">
+            <label>Sort by Deadline</label>
+            <select name="sort">
+                <option value="new_to_old" {% if sort_order=='new_to_old' %}selected{% endif %}>New → Old</option>
+                <option value="old_to_new" {% if sort_order=='old_to_new' %}selected{% endif %}>Old → New</option>
+            </select>
+        </div>
+
+        <button type="submit">Apply</button>
+    </form>
+
+    <!-- Tasks Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.deadline }}</td>
+                <td>{{ task.status }}</td>
+                <td>
+                    <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" style="display:inline;">
+                        <button class="btn-delete">Delete</button>
+                    </form>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

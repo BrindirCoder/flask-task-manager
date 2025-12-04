@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Task - Modern UI</title>
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --secondary: #10b981;
+    --accent: #f59e0b;
+    --surface: rgba(255, 255, 255, 0.15);
+    --background: #f0f2f5;
+    --shadow: rgba(0, 0, 0, 0.08);
+    --text: #1f2937;
+}
+
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', sans-serif; }
+
+body {
+    background: linear-gradient(135deg, #f0f2f5, #e2e8f0);
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+    min-height: 100vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* Floating shapes */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: float 12s ease-in-out infinite;
+}
+.shape:nth-child(1) { width: 200px; height: 200px; background: var(--primary); top: -80px; left: -80px; }
+.shape:nth-child(2) { width: 250px; height: 250px; background: var(--secondary); bottom: -100px; right: -100px; animation-delay: 6s; }
+.shape:nth-child(3) { width: 150px; height: 150px; background: var(--accent); top: 40%; left: -100px; animation-delay: 3s; }
+
+@keyframes float {
+    0%,100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-20px) translateX(20px); }
+}
+
+/* Container */
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 40px 35px;
+    border-radius: 24px;
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 12px 40px var(--shadow);
+    animation: fadeInUp 1s ease forwards;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fadeInUp { 0% { opacity:0; transform:translateY(30px);} 100% {opacity:1; transform:translateY(0);} }
+
+h1 {
+    text-align: center;
+    font-size: 32px;
+    color: var(--primary);
+    margin-bottom: 30px;
+    animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+
+label { display:block; margin:12px 0 6px; font-weight:600; color:var(--text); }
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 18px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+    outline: none;
+}
+
+textarea { resize: vertical; height: 100px; }
+
+/* Buttons */
+button, .home-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+button {
+    width: 100%;
+    background: linear-gradient(135deg, var(--secondary), #0a8b6e);
+    color: white;
+    font-size: 18px;
+    background-size: 200% 200%;
+    animation: gradientShift 5s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position:0% 50%; }
+    50% { background-position:100% 50%; }
+    100% { background-position:0% 50%; }
+}
+
+button:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 28px rgba(0,0,0,0.2); }
+
+.home-button {
+    background: var(--primary);
+    color: white;
+    font-size: 16px;
+    margin-bottom: 25px;
+}
+
+.home-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Responsive */
+@media(max-width:480px) {
+    .container { padding: 35px 20px; }
+    h1 { font-size: 28px; }
+    input, textarea, select { font-size: 14px; padding: 10px; }
+    button, .home-button { font-size: 14px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="shape"></div>
+<div class="shape"></div>
+<div class="shape"></div>
+
+<div class="container">
+
+    <a href="/" class="home-button">&#8592; Home</a>
+
+    <h1>Add New Task</h1>
+    <form action="{{url_for('add_task')}}" method="POST">
+        <label for="title">Title</label>
+        <input type="text" name="title" required>
+
+        <label for="description">Description</label>
+        <textarea name="description" required></textarea>
+
+        <label for="deadline">Deadline</label>
+        <input type="date" name="deadline" required>
+
+        <label for="category">Category</label>
+        <input type="text" name="category" required>
+
+        <label for="status">Status</label>
+        <select name="status" required>
+            <option value="pending">Pending</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+        </select>
+
+        <button type="submit">Add Task</button>
+    </form>
+</div>
+
+</body>
+</html>
