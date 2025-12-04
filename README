@@ -1,0 +1,94 @@
+# TaskFlow Flask – Task Manager Application
+
+A clean and modular **Flask-based Task Manager** designed to demonstrate professional project structure, database integration, and scalable backend patterns.  
+Built with a focus on clarity, simplicity, and real-world development practices.
+
+---
+
+## ✨ Features
+
+- Modern Flask application factory pattern
+- SQLAlchemy ORM for database management
+- Flask-Migrate for safe schema evolution
+- Structured and extensible project layout
+- Ready for deployment or further extension (authentication, APIs, UI, etc.)
+
+---
+
+## 📦 Tech Stack
+
+- **Python 3.10+**
+- **Flask**
+- **Flask SQLAlchemy**
+- **Flask-Migrate**
+- **SQLite** (default, but easily switchable to PostgreSQL/MySQL)
+
+---
+
+## 📁 Project Structure
+
+Task Manager/
+│── app.py
+│── config.py
+│── requirements.txt
+│── /migrations
+│── /instance
+│── /app
+├── init.py
+├── models.py
+├── routes.py
+
+
+This layout follows Flask best practices and supports scaling the project into a full application.
+
+---
+
+## 🚀 Installation & Setup
+
+Below are universal instructions that work on **Windows**, **macOS**, and **Linux**.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/taskflow-flask.git
+cd taskflow-flask
+
+2. Create a virtual environment
+
+Windows
+
+python -m venv venv
+venv\Scripts\activate
+
+
+macOS / Linux
+
+python3 -m venv venv
+source venv/bin/activate
+
+3. Install dependencies
+pip install -r requirements.txt
+
+4. Initialize the database
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+
+5. Run the application
+flask run
+
+
+App will be available at:
+http://127.0.0.1:5000
+
+🛠 Configuration
+
+You can configure the database or environment by editing:
+
+instance/config.py
+
+
+Or by passing environment variables such as:
+
+export FLASK_APP=app.py
+export FLASK_ENV=development
